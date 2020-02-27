@@ -5,24 +5,6 @@
 #define LED 2
 #define INPUT 0
 
-int checkInput();
-void setOutput(int status);
-void setLED(int status);
-
-void setup();
-void start();
-void finish();
-void bench();
-
-int main(){
-	setup();	
-	while(1){
-		start();
-		benchmark();
-		finish();
-	}
-}
-
 int checkInput(){
 	return PIND & (1 << INPUT);
 }
@@ -52,15 +34,15 @@ void start(){
 }
 
 void finish(){
-	setLED(0);
+	
 	setOutput(1);	//signal finished computing
-	setOutput(0);
+	setLED(0);
 	while( checkInput()); //active wait for start signal diapear
+	setOutput(0);
 }
 
 void benchmark(){
-	unsigned int primesArray[10000];
-	unsigned int i, j, foundPrimes = 0, isNotPrime;
+	unsigned int primesArray[10000], i, j, foundPrimes = 0, isNotPrime;
 	for(i=2;i<65535;i++){
 		isNotPrime = 0;
 
@@ -74,5 +56,15 @@ void benchmark(){
 			primesArray[foundPrimes] = i;
 			foundPrimes++;
 		}
+	}
+}
+
+int main(){
+	unsigned int z;
+	setup();	
+	while(1){
+		start();
+		for(z=0;z<60000;z++) benchmark();
+		finish();
 	}
 }
