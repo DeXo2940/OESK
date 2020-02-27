@@ -34,10 +34,9 @@ void start(){
 }
 
 void finish(){
-	
 	setOutput(1);	//signal finished computing
 	setLED(0);
-	while( checkInput()); //active wait for start signal diapear
+	while( checkInput()); //active wait for start signal disapear
 	setOutput(0);
 }
 
@@ -45,7 +44,6 @@ void benchmark(){
 	unsigned int primesArray[10000], i, j, foundPrimes = 0, isNotPrime;
 	for(i=2;i<65535;i++){
 		isNotPrime = 0;
-
 		for(j=0;j<foundPrimes;j++){
 			if(i%primesArray[j] == 0){
 				isNotPrime = 1;
