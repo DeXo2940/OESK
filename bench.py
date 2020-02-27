@@ -32,16 +32,17 @@ try:
 
 	print("START")
 	totalTime = 0
-	for i in range(0, numbersOfRevolutions):
+	for i in range(0, numbersOfRevolutions):		
 
 		GPIO.output(outPin, 1)       # avr start computing
 		startTime = time()
 		while(GPIO.input(inPin) == 0): #wait for avr to finish
 			pass
+		GPIO.output(outPin, 0) 		
 		while(GPIO.input(inPin) == 1): #wait for avr to reset
 			pass
 		elapsedTime = time() - startTime
-		GPIO.output(outPin, 0) 
+		
 
 		totalTime += elapsedTime
 		
