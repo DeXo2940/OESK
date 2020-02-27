@@ -15,14 +15,10 @@ void finish();
 void bench();
 
 int main(){
-	setup();
-	
+	setup();	
 	while(1){
-		
 		start();
-		
 		benchmark();
-		
 		finish();
 	}
 }
@@ -57,12 +53,26 @@ void start(){
 
 void finish(){
 	setLED(0);
-	setOutput(1);	//signal finished counting
+	setOutput(1);	//signal finished computing
 	setOutput(0);
 	while( checkInput()); //active wait for start signal diapear
 }
 
 void benchmark(){
-	int i;	
-	_delay_ms(3000);	
+	unsigned int primesArray[10000];
+	unsigned int i, j, foundPrimes = 0, isNotPrime;
+	for(i=2;i<65535;i++){
+		isNotPrime = 0;
+
+		for(j=0;j<foundPrimes;j++){
+			if(i%primesArray[j] == 0){
+				isNotPrime = 1;
+				break;
+			}
+		}
+		if(isNotPrime == 0){
+			primesArray[foundPrimes] = i;
+			foundPrimes++;
+		}
+	}
 }
