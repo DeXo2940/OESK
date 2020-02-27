@@ -43,7 +43,6 @@ try:
 			pass
 		elapsedTime = time() - startTime
 		
-
 		totalTime += elapsedTime
 		
 		plotData.append(elapsedTime)
