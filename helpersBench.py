@@ -11,12 +11,12 @@ atmegaFuse = {
 	"atmega8:4MHz":"<l>0xD3:m <h>0xD9:m",
 	"atmega8:8MHz":"<l>0xE4:m <h>0xD9:m", 
 	"atmega8:extHigh":"<l>0xFF:m <h>0xD9:m",
-	"atmega88p:8MHz":"<l>0x62:m <h>0xDF:m <e>0xF9",
-	"atmega88p:128kHz":"<l>0x63:m <h>0xDF:m <e>0xF9",
-	"atmega88p:extHigh":"<l>0x7F:m <h>0xDF:m <e>0xF9",
-	"atmega328p:8MHz":"<l>0x62:m <h>0xD9:m <e>0xFF",
-	"atmega328p:128kHz":"<l>0x63:m <h>0xD9:m <e>0xFF",
-	"atmega328p:8MHz":"<l>0x7F:m <h>0xD9:m <e>0xFF"
+	"atmega88p:8MHz":"<l>0x62:m <h>0xDF:m <e>0xF9:m",
+	"atmega88p:128kHz":"<l>0x63:m <h>0xDF:m <e>0xF9:m",
+	"atmega88p:extHigh":"<l>0x7F:m <h>0xDF:m <e>0xF9:m",
+	"atmega328p:8MHz":"<l>0x62:m <h>0xD9:m <e>0xFF:m",
+	"atmega328p:128kHz":"<l>0x63:m <h>0xD9:m <e>0xFF:m",
+	"atmega328p:8MHz":"<l>0x7F:m <h>0xD9:m <e>0xFF:m"
 }
 
 def prepareFiles(procName, progName = "bench.c", progrName = "usbasp", log = True):
@@ -75,10 +75,10 @@ def setFuse(cmd,log=True):
 	out, err = p.communicate()
 		
 	if log == True:
-		print(cmd)
+		print(cmd[1])
 		print(out)		
 		print(err)	
 
 	for line in err.splitlines():
 		if "rc=-1" in line:
-			raise CustomError(cmd, err)
+			raise CustomError(cmd[1], err)

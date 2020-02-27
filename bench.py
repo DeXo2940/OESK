@@ -4,18 +4,17 @@
 import helpersBench
 import OPi.GPIO as GPIO
 
+from time import sleep, time
+
 outPin = 16
 inPin = 7
- 
 
-from time import sleep, time     
- 
 GPIO.setboard(GPIO.PCPCPLUS)    # Orange Pi PC board
 GPIO.setmode(GPIO.BOARD)        # set up BOARD BCM numbering
 GPIO.setup(outPin, GPIO.OUT)
 GPIO.setup(inPin, GPIO.IN)
 
-progName = "bejch.c"	# <program>
+progName = "bench.c"	# <program>
 progrName = "usbasp"	# <programator>
 
 log = False
@@ -25,15 +24,17 @@ numbersOfRevolutions = 10
 plotData = []
 
 try:
-	procName = helpersBench.findProc(progrName, log)
-	fuses = helpersBench.getFuse(procName)
-	helpersBench.prepareFiles(procName, log = log)
-	
 	GPIO.output(outPin, 0) 
+	procName = helpersBench.findProc(progrName, log) #find what is this microcontroler
+	fuses = helpersBench.getFuse(procName)
+	helpersBench.prepareFiles(procName, log = log) #perpare hex for microcontroler
+	print(procName)
+
+	if not fuses:
+		raise helpersBench.CustomError(["Unsuported Microcontroler"])
 	
 	for fuse in fuses:
-		print(fuse[0])
-		helpersBench.setFuse(fuse,log)
+		helpersBench.setFuse(fuse,log)	#set h,l,e Fuses
 		
 		print("START")
 		totalTime = 0
