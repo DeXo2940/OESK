@@ -4,7 +4,8 @@
 import helpersBench
 import OPi.GPIO as GPIO
 
-from time import sleep, time
+from time import time
+from datetime import datetime
 
 outPin = 16
 inPin = 7
@@ -16,10 +17,11 @@ GPIO.setup(inPin, GPIO.IN)
 
 progName = "bench.c"	# <program>
 progrName = "usbasp"	# <programator>
+fileName = "results.csv" # result file
 
 log = False
 
-numbersOfRevolutions = 10
+numbersOfRevolutions = 1000
 
 plotData = []
 
@@ -29,15 +31,17 @@ try:
 	fuses = helpersBench.getFuse(procName)
 	helpersBench.prepareFiles(procName, log = log) #perpare hex for microcontroler
 	print(procName)
+	dateTime = datetime.now().strftime("%d/%m/%y_%H:%M")
 
 	if not fuses:
 		raise helpersBench.CustomError(["Unsuported Microcontroler"])
 	
+	f = open(fileName,"a")
+
 	for fuse in fuses:
 		helpersBench.setFuse(fuse,log)	#set h,l,e Fuses
 		
-		print("START")
-		totalTime = 0
+		plotPrint = ""
 		for i in range(0, numbersOfRevolutions):		
 			GPIO.output(outPin, 1)       # avr start computing
 			startTime = time()
@@ -47,12 +51,13 @@ try:
 			while(GPIO.input(inPin) == 1): #wait for avr to reset
 				pass
 			elapsedTime = time() - startTime
-			totalTime += elapsedTime
 			plotData.append(elapsedTime)
+			plotPrint += "\t"+str(elapsedTime)
 	
-	
-		print("meanTime = " + str(totalTime/numbersOfRevolutions))
+		#print("meanTime = " + str(totalTime/numbersOfRevolutions))
 		#print(plotData)
+		f.write(dateTime+"\t"+fuse[0]+plotPrint+"\n")
+
 except KeyboardInterrupt:
 	print (" Keyboard interupt")
 except helpersBench.CustomError as err:
@@ -62,3 +67,4 @@ except helpersBench.CustomError as err:
 finally:
 	GPIO.output(outPin, 0)       
 	GPIO.cleanup()              # Clean GPIO
+	f.close()
