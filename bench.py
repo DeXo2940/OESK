@@ -26,30 +26,35 @@ plotData = []
 
 try:
 	procName = helpersBench.findProc(progrName, log)
+	fuses = helpersBench.getFuse(procName)
 	helpersBench.prepareFiles(procName, log = log)
 	
 	GPIO.output(outPin, 0) 
+	
+	for fuse in fuses:
+		print(fuse[0])
+		setFuse(fuse,log)
+		
+		print("START")
+		totalTime = 0
+		for i in range(0, numbersOfRevolutions):		
 
-	print("START")
-	totalTime = 0
-	for i in range(0, numbersOfRevolutions):		
-
-		GPIO.output(outPin, 1)       # avr start computing
-		startTime = time()
-		while(GPIO.input(inPin) == 0): #wait for avr to finish
-			pass
-		GPIO.output(outPin, 0) 		
-		while(GPIO.input(inPin) == 1): #wait for avr to reset
-			pass
-		elapsedTime = time() - startTime
-		
-		totalTime += elapsedTime
-		
-		plotData.append(elapsedTime)
-		
-		
-	print("meanTime = " + str(totalTime/numbersOfRevolutions))
-	print(plotData)
+			GPIO.output(outPin, 1)       # avr start computing
+			startTime = time()
+			while(GPIO.input(inPin) == 0): #wait for avr to finish
+				pass
+			GPIO.output(outPin, 0) 		
+			while(GPIO.input(inPin) == 1): #wait for avr to reset
+				pass
+			elapsedTime = time() - startTime
+	
+			totalTime += elapsedTime
+	
+			plotData.append(elapsedTime)
+	
+	
+		print("meanTime = " + str(totalTime/numbersOfRevolutions))
+		print(plotData)
 except KeyboardInterrupt:
 	print (" Keyboard interupt")
 except helpersBench.CustomError as err:
