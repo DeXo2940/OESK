@@ -6,17 +6,17 @@ class CustomError(Exception):
 commands = ["avr-gcc -Wall -g -Os -mmcu=<processor> -o main.bin <program>" , "avr-objcopy -j .text -j .data -O ihex main.bin main.hex", "avrdude -c <programator> -p <processor> -U flash:w:main.hex - P usb", "rm main.bin main.hex"]
 
 atmegaFuse = {
-	"atmega8:1MHz":"<l>0xE1:m <h>0xD9:m",
-	"atmega8:2MHz":"<l>0xE2:m <h>0xD9:m",
-	"atmega8:4MHz":"<l>0xD3:m <h>0xD9:m",
-	"atmega8:8MHz":"<l>0xE4:m <h>0xD9:m", 
-	"atmega8:extHigh":"<l>0xFF:m <h>0xD9:m",
-	"atmega88p:8MHz":"<l>0x62:m <h>0xDF:m",
-	"atmega88p:128kHz":"<l>0x63:m <h>0xDF:m",
-	"atmega88p:extHigh":"<l>0x7F:m <h>0xDF:m",
-	"atmega328p:8MHz":"<l>0x62:m <h>0xD9:m",
-	"atmega328p:128kHz":"<l>0x63:m <h>0xD9:m",
-	"atmega328p:8MHz":"<l>0x7F:m <h>0xD9:m"
+	"atmega8:1MHz":"<l>0xE1:m",
+	"atmega8:2MHz":"<l>0xE2:m",
+	"atmega8:4MHz":"<l>0xD3:m",
+	"atmega8:8MHz":"<l>0xE4:m", 
+	"atmega8:extHigh":"<l>0xFF:m",
+	"atmega88p:8MHz":"<l>0x62:m",
+	"atmega88p:128kHz":"<l>0x63:m",
+	"atmega88p:extHigh":"<l>0x7F:m",
+	"atmega328p:8MHz":"<l>0x62:m",
+	"atmega328p:128kHz":"<l>0x63:m",
+	"atmega328p:ext":"<l>0x4F:m"
 }
 
 def prepareFiles(procName, progName = "bench.c", progrName = "usbasp", log = True):
