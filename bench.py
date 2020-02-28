@@ -27,6 +27,7 @@ plotData = []
 
 try:
 	GPIO.output(outPin, 0) 
+	f = open(fileName,"a")
 	procName = helpersBench.findProc(progrName, log) #find what is this microcontroler
 	fuses = helpersBench.getFuse(procName)
 	helpersBench.prepareFiles(procName, log = log) #perpare hex for microcontroler
@@ -34,14 +35,11 @@ try:
 	dateTime = datetime.now().strftime("%d/%m/%y_%H:%M")
 
 	if not fuses:
-		raise helpersBench.CustomError(["Unsuported Microcontroler"])
-	
-	f = open(fileName,"a")
+		raise helpersBench.CustomError(["Unsuported Microcontroler"])	
 
 	for fuse in fuses:
 		helpersBench.setFuse(fuse,log)	#set h,l,e Fuses
 		
-		plotPrint = ""
 		for i in range(0, numbersOfRevolutions):		
 			GPIO.output(outPin, 1)       # avr start computing
 			startTime = time()
@@ -52,11 +50,10 @@ try:
 				pass
 			elapsedTime = time() - startTime
 			plotData.append(elapsedTime)
-			plotPrint += "\t"+str(elapsedTime)
-	
-		#print("meanTime = " + str(totalTime/numbersOfRevolutions))
-		#print(plotData)
-		f.write(dateTime+"\t"+fuse[0]+plotPrint+"\n")
+		
+		average = sum(plotData) / len(plotData)		
+
+		f.write(dateTime+"\t"+fuse[0]+"\t"+str(average)+"\t"+str(min(plotData))+"\t"+str(max(plotData))+"\n")
 
 except KeyboardInterrupt:
 	print (" Keyboard interupt")
