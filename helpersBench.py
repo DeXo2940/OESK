@@ -54,7 +54,7 @@ def findProc(progrName = "usbasp", log = True):
 		print(err)	
 
 	for line in err.splitlines():
-		if "rc=-1" in line:
+		if "rc=-1" in line or "error" in line:
 			raise CustomError(command, err)
 		if "Device signature =" in line:
 			device = line[line.find("(probably")+10:line.find(")")]
